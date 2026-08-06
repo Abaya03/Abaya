@@ -1,0 +1,8 @@
+{
+  "name": "Remix IMROP - Gestion des Laboratoires",
+  "description": "Système de Gestion d'Information de Laboratoire pour l'IMROP (Centre de Nouakchott) - Suivi des échantillons, analyses chimiques/biologiques, équipements, réactifs, traçabilité et rapports d'analyse.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
