@@ -9,7 +9,7 @@ export const LabsModule: React.FC = () => {
     {
       name: 'Laboratoire de Chimie',
       desc: 'Analyses physiques-chimiques (pH, Salinité, Conductivité, Nutriments, Métaux lourds).',
-      head: 'Brahim Ould Fall',
+      head: 'Dr. Bouya M\'Beingue',
     },
     {
       name: 'Laboratoire d\'Analyses environnementales',
@@ -24,7 +24,7 @@ export const LabsModule: React.FC = () => {
     {
       name: 'Laboratoire d\'Halieutique',
       desc: 'Anatomie, croissance des stocks de poissons, dynamique des populations.',
-      head: 'Dr. Sidi Mohamed Ould Ely',
+      head: 'Brahim Med Moustapha',
     }
   ];
 

@@ -102,7 +102,7 @@ export const Dashboard: React.FC = () => {
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-teal-500/20 text-teal-300 border border-teal-500/30">
-                CENTRE CENTRAL IMROP — CENTRE DE NOUAKCHOTT
+                IMROP — CENTRE DE NOUAKCHOTT
               </span>
             </div>
             <h1 className="text-xl font-bold font-mono text-white tracking-tight">Tableau de Bord des Laboratoires</h1>

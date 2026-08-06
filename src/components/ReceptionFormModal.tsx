@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FileText, Download, Printer, X, CheckCircle2, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { Sample } from '../types/lims';
 import { generateReceptionFormPDF } from '../utils/pdfGenerator';
-import imropLogo from '../assets/images/imrop_official_logo_1786011645324.jpg';
+import imropLogo from '../assets/images/imrop_new_official_logo_1786017881022.jpg';
 
 interface ReceptionFormModalProps {
   sample: Sample;
@@ -234,7 +234,7 @@ export const ReceptionFormModal: React.FC<ReceptionFormModalProps> = ({ sample, 
               <div className="p-3 space-y-2">
                 <span className="font-bold text-slate-800 block underline">Vérifié par</span>
                 <div className="flex items-center justify-between">
-                  <p className="text-slate-700 font-medium">Nom : {sample.verifiedBy || 'Dr. Sidi Mohamed Ould Ely'}</p>
+                  <p className="text-slate-700 font-medium">Nom : {sample.verifiedBy || 'Brahim Med Moustapha'}</p>
                   <p className="text-slate-700 font-medium">Date : {sample.verifiedDate || sample.receptionDate}</p>
                 </div>
                 <div className="pt-4 text-slate-400 font-mono text-[10px]">Signature : [Validé Responsable]</div>

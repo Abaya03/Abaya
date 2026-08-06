@@ -2,7 +2,49 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import QRCode from 'qrcode';
 import { Sample, AnalysisResult, Report } from '../types/lims';
-import imropLogo from '../assets/images/imrop_official_logo_1786011645324.jpg';
+import imropLogo from '../assets/images/imrop_new_official_logo_1786017881022.jpg';
+
+/**
+ * Renders the Arabic header block onto an off-screen HTML canvas
+ * and returns a PNG data URL. This allows jsPDF to embed pixel-perfect
+ * Arabic typography with proper shaping and ligatures without requiring
+ * external TTF font files in jsPDF.
+ */
+function renderArabicHeaderCanvas(): string {
+  try {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1200;
+    canvas.height = 240;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return '';
+
+    ctx.fillStyle = '#0f172a';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'top';
+
+    // 1. République Islamique de Mauritanie (Arabic)
+    ctx.font = 'bold 36px "Segoe UI", Tahoma, Geneva, Arial, sans-serif';
+    ctx.fillText('الجمهورية الإسلامية الموريتانية', 1180, 5);
+
+    // 2. Honneur - Fraternité - Justice (Arabic)
+    ctx.font = 'normal 30px "Segoe UI", Tahoma, Geneva, Arial, sans-serif';
+    ctx.fillText('شرف – إخاء – عدل', 1180, 55);
+
+    // 3. Ministère (Arabic)
+    ctx.font = 'normal 30px "Segoe UI", Tahoma, Geneva, Arial, sans-serif';
+    ctx.fillText('وزارة الصيد والبنى التحتية البحرية والمينائية', 1180, 100);
+
+    // 4. IMROP (Arabic)
+    ctx.font = 'bold 34px "Segoe UI", Tahoma, Geneva, Arial, sans-serif';
+    ctx.fillStyle = '#1b62a5';
+    ctx.fillText('المعهد الموريتاني لبحوث المحيطات والصيد', 1180, 150);
+
+    return canvas.toDataURL('image/png');
+  } catch (err) {
+    console.error('Error rendering Arabic header canvas:', err);
+    return '';
+  }
+}
 
 export async function generateReportPDF(
   sample: Sample,
@@ -69,17 +111,16 @@ export async function generateReportPDF(
     doc.text('IMROP', 105, 16.5, { align: 'center' });
   }
 
-  // Right Block
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(7);
-  doc.setTextColor(15, 23, 42);
-  doc.text('الجمهورية الإسلامية الموريتانية', 196, 9, { align: 'right' });
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(6.5);
-  doc.text('شرف – إخاء – عدل', 196, 12, { align: 'right' });
-  doc.text('وزارة الصيد والبنى التحتية البحرية والمينائية', 196, 15, { align: 'right' });
-  doc.setFont('helvetica', 'bold');
-  doc.text('المعهد الموريتاني لبحوث المحيطات والصيد', 196, 18, { align: 'right' });
+  // Right Block (Arabic rendered cleanly via Canvas PNG to avoid garbled characters)
+  const arabicHeaderImg = renderArabicHeaderCanvas();
+  if (arabicHeaderImg) {
+    doc.addImage(arabicHeaderImg, 'PNG', 128, 7.5, 68, 13.6);
+  } else {
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(7);
+    doc.setTextColor(15, 23, 42);
+    doc.text('IMROP Mauritanie', 196, 9, { align: 'right' });
+  }
 
   // --- BLUE BANNER: Laboratoire de Chimie — IMROP Nouakchott ---
   doc.setFillColor(27, 98, 165); // #1b62a5
@@ -107,14 +148,15 @@ export async function generateReportPDF(
 
   // Add QR Code in top-right corner if available
   if (qrDataUrl) {
-    doc.addImage(qrDataUrl, 'PNG', 180, 37, 15, 15);
+    doc.addImage(qrDataUrl, 'PNG', 180, 36, 15, 15);
   }
 
   // --- METADATA BOXES (2 Columns) ---
   // Left Box: Client info
   autoTable(doc, {
     startY: 49,
-    margin: { left: 14, right: 106 },
+    margin: { left: 14, right: 106, top: 2, bottom: 2 },
+    pageBreak: 'avoid',
     theme: 'grid',
     tableWidth: 88,
     styles: { fontSize: 7, cellPadding: 1.2, textColor: [15, 23, 42], lineColor: [15, 23, 42], lineWidth: 0.2 },
@@ -130,7 +172,8 @@ export async function generateReportPDF(
   // Right Box: Lab execution info
   autoTable(doc, {
     startY: 49,
-    margin: { left: 108, right: 14 },
+    margin: { left: 108, right: 14, top: 2, bottom: 2 },
+    pageBreak: 'avoid',
     theme: 'grid',
     tableWidth: 88,
     styles: { fontSize: 7, cellPadding: 1.2, textColor: [15, 23, 42], lineColor: [15, 23, 42], lineWidth: 0.2 },
@@ -171,7 +214,8 @@ export async function generateReportPDF(
 
   autoTable(doc, {
     startY: nextY + 2,
-    margin: { left: 14, right: 14 },
+    margin: { left: 14, right: 14, top: 2, bottom: 2 },
+    pageBreak: 'avoid',
     head: [['Paramètre', 'Méthode Utilisée', 'Résultat', 'Unité']],
     body: tableBody,
     theme: 'grid',
@@ -200,7 +244,7 @@ export async function generateReportPDF(
   });
 
   // @ts-ignore
-  const signY = (doc as any).lastAutoTable.finalY + 8;
+  const signY = (doc as any).lastAutoTable.finalY + 6;
 
   // --- SIGNATURES & AUTHORIZATION BLOCK ---
   doc.setFont('helvetica', 'bold');
@@ -233,12 +277,12 @@ export async function generateReportPDF(
   doc.setFont('helvetica', 'italic');
   doc.setFontSize(7);
   doc.setTextColor(100, 116, 139);
-  doc.text('Ce rapport ne concerne que l\'échantillon soumis à l\'essai.', 14, signY + 22);
+  doc.text('Ce rapport ne concerne que l\'échantillon soumis à l\'essai.', 14, signY + 21);
 
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(7.5);
   doc.setTextColor(15, 23, 42);
-  doc.text('FIN DU RAPPORT', 105, signY + 26, { align: 'center' });
+  doc.text('FIN DU RAPPORT', 105, signY + 25, { align: 'center' });
 
   // --- ISO 17025 FOOTER BOX (RAP-CHI-01-V4.0) ---
   const pageHeight = doc.internal.pageSize.height;
@@ -248,12 +292,13 @@ export async function generateReportPDF(
   doc.setFontSize(5.5);
   doc.setTextColor(71, 85, 105);
   const footerText = 'Collecte : après formalisation du document – Classement : alphanumérique – Stockage : fichier informatique (seule la version électronique fait foi) – Accès : libre – Durée de conservation : 2 ans après nouvelle version datée– Élimination : suppression fichier électronique.';
-  doc.text(doc.splitTextToSize(footerText, 182), 14, pageHeight - 20);
+  doc.text(doc.splitTextToSize(footerText, 182), 14, pageHeight - 19);
 
   // ISO Quality Grid
   autoTable(doc, {
-    startY: pageHeight - 16,
-    margin: { left: 14, right: 14 },
+    startY: pageHeight - 15,
+    margin: { left: 14, right: 14, top: 1, bottom: 1 },
+    pageBreak: 'avoid',
     theme: 'grid',
     styles: { fontSize: 6.5, cellPadding: 1, textColor: [15, 23, 42], lineColor: [15, 23, 42], lineWidth: 0.2, halign: 'center' },
     body: [
@@ -269,6 +314,11 @@ export async function generateReportPDF(
       ]
     ]
   });
+
+  // Ensure strict 1-page document fitting
+  while (doc.getNumberOfPages() > 1) {
+    doc.deletePage(doc.getNumberOfPages());
+  }
 
   const pdfBlob = doc.output('blob');
   const pdfDataUrl = doc.output('dataurlstring');
@@ -479,7 +529,7 @@ export async function generateReceptionFormPDF(
       ],
       [
         `Nom : ${sample.receivedBy || 'Mohamed Abdallahi'}\n\nSignature :`,
-        `Nom : ${sample.verifiedBy || 'Dr. Sidi Mohamed Ould Ely'}\n\nSignature :                                 Date : ${sample.verifiedDate || sample.receptionDate}`
+        `Nom : ${sample.verifiedBy || 'Brahim Med Moustapha'}\n\nSignature :                                 Date : ${sample.verifiedDate || sample.receptionDate}`
       ]
     ]
   });
@@ -496,8 +546,9 @@ export async function generateReceptionFormPDF(
 
   // ISO Quality Footer Grid
   autoTable(doc, {
-    startY: pageHeight - 16,
-    margin: { left: 14, right: 14 },
+    startY: pageHeight - 15,
+    margin: { left: 14, right: 14, top: 1, bottom: 1 },
+    pageBreak: 'avoid',
     theme: 'grid',
     styles: { fontSize: 6.5, cellPadding: 1.2, textColor: [15, 23, 42], lineColor: [15, 23, 42], lineWidth: 0.2, halign: 'center' },
     body: [
@@ -513,6 +564,10 @@ export async function generateReceptionFormPDF(
       ]
     ]
   });
+
+  while (doc.getNumberOfPages() > 1) {
+    doc.deletePage(doc.getNumberOfPages());
+  }
 
   const pdfBlob = doc.output('blob');
   const pdfDataUrl = doc.output('dataurlstring');

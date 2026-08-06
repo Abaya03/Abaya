@@ -565,7 +565,7 @@ export const UsersModule: React.FC = () => {
                     required={!isAdmin}
                     value={switchPasswordInput}
                     onChange={(e) => setSwitchPasswordInput(e.target.value)}
-                    placeholder={`Mot de passe (ex: ${switchModalUser.password || 'imrop2026'})`}
+                    placeholder="Saisissez votre mot de passe"
                     className="w-full bg-slate-50 border border-slate-200 rounded p-2.5 pr-10 text-slate-900 font-bold focus:ring-1 focus:ring-teal-500"
                   />
                   <button
@@ -576,8 +576,8 @@ export const UsersModule: React.FC = () => {
                     {showSwitchPwd ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
-                <p className="text-[10px] text-teal-700 font-bold mt-1">
-                  Mot de passe enregistré : <code className="bg-teal-50 px-1 py-0.5 rounded border border-teal-200">{switchModalUser.password || 'imrop2026'}</code>
+                <p className="text-[10px] text-slate-500 mt-1">
+                  Accès sécurisé ISO 17025 — Saisissez votre mot de passe personnel.
                 </p>
               </div>
 

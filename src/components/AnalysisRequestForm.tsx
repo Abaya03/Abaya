@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FileText, Printer, Save, Plus, ArrowLeft, CheckCircle2, ShieldCheck, Download } from 'lucide-react';
 import { useLIMS } from '../services/limsStore';
 import { AnalysisRequest, AnalysisRequestItem } from '../types/lims';
-import imropLogo from '../assets/images/imrop_official_logo_1786011645324.jpg';
+import imropLogo from '../assets/images/imrop_new_official_logo_1786017881022.jpg';
 
 export const AnalysisRequestForm: React.FC<{
   selectedRequest?: AnalysisRequest | null;

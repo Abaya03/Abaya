@@ -31,7 +31,7 @@ export const Sidebar: React.FC = () => {
 
   const navItems = [
     { id: 'dashboard', label: '1. Tableau de bord', icon: LayoutDashboard, badge: null },
-    { id: 'samples', label: '2. Fiche des réceptions', icon: TestTube2, badge: pendingSamplesCount > 0 ? pendingSamplesCount : null, color: 'bg-blue-500' },
+    { id: 'samples', label: '2. Fiche des réceptions LABO', icon: TestTube2, badge: pendingSamplesCount > 0 ? pendingSamplesCount : null, color: 'bg-blue-500' },
     { id: 'analyses', label: '3. Demandes d\'analyses', icon: FileSpreadsheet, badge: inAnalysisCount > 0 ? inAnalysisCount : null, color: 'bg-amber-500' },
     { id: 'labs', label: '4. Laboratoires IMROP', icon: Building2, badge: null },
     { id: 'methods', label: '5. Méthodes d\'analyse', icon: BookOpen, badge: null },

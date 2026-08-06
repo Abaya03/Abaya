@@ -17,6 +17,7 @@ import { StatisticsModule } from './components/StatisticsModule';
 import { UsersModule } from './components/UsersModule';
 import { AuditLogModule } from './components/AuditLogModule';
 import { SettingsModule } from './components/SettingsModule';
+import { LoginModal } from './components/LoginModal';
 
 const MainContent: React.FC = () => {
   const { activeTab } = useLIMS();
@@ -65,16 +66,25 @@ const MainContent: React.FC = () => {
   );
 };
 
+const AppLayout: React.FC = () => {
+  const { isAuthenticated } = useLIMS();
+
+  return (
+    <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-sans antialiased selection:bg-teal-600 selection:text-white flex flex-col relative">
+      {!isAuthenticated && <LoginModal />}
+      <Header />
+      <div className="flex-1 flex overflow-hidden">
+        <Sidebar />
+        <MainContent />
+      </div>
+    </div>
+  );
+};
+
 export default function App() {
   return (
     <LIMSProvider>
-      <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-sans antialiased selection:bg-teal-600 selection:text-white flex flex-col">
-        <Header />
-        <div className="flex-1 flex overflow-hidden">
-          <Sidebar />
-          <MainContent />
-        </div>
-      </div>
+      <AppLayout />
     </LIMSProvider>
   );
 }

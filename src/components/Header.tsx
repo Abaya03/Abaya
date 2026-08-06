@@ -7,17 +7,19 @@ import {
   ShieldCheck,
   CheckCircle2,
   AlertTriangle,
-  ChevronDown
+  ChevronDown,
+  LogOut
 } from 'lucide-react';
 import { useLIMS } from '../services/limsStore';
 import { UserRole } from '../types/lims';
-import imropLogo from '../assets/images/imrop_official_logo_1786011645324.jpg';
+import imropLogo from '../assets/images/imrop_new_official_logo_1786017881022.jpg';
 
 export const Header: React.FC = () => {
   const {
     currentUser,
     setCurrentUser,
     users,
+    logout,
     instruments,
     reagents,
     results,
@@ -192,7 +194,7 @@ export const Header: React.FC = () => {
                       <div>
                         <p className="font-bold text-xs">{u.name}</p>
                         <p className="text-[10px] text-slate-500">{u.role} — {u.lab}</p>
-                        <p className="text-[9px] text-teal-700 font-semibold mt-0.5">MDP: {u.password || 'imrop2026'}</p>
+                        <p className="text-[9px] text-slate-400 font-medium mt-0.5">Mot de passe : ••••••••</p>
                       </div>
                       {currentUser.id === u.id && <CheckCircle2 className="w-4 h-4 text-teal-600" />}
                     </button>
@@ -201,6 +203,16 @@ export const Header: React.FC = () => {
               </div>
             )}
           </div>
+
+          {/* Logout Button */}
+          <button
+            onClick={logout}
+            className="flex items-center gap-1.5 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 px-2.5 py-1.5 rounded text-xs font-mono font-bold transition-colors"
+            title="Verrouiller la session / Se déconnecter"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Déconnexion</span>
+          </button>
         </div>
       </div>
     </header>

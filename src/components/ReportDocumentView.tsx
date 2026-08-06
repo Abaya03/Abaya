@@ -1,7 +1,7 @@
 import React from 'react';
 import { Sample, AnalysisResult, Report } from '../types/lims';
 import { Download, Printer, ArrowLeft } from 'lucide-react';
-import imropLogo from '../assets/images/imrop_official_logo_1786011645324.jpg';
+import imropLogo from '../assets/images/imrop_new_official_logo_1786017881022.jpg';
 
 export const ReportDocumentView: React.FC<{
   report: Report;

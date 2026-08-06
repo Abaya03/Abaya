@@ -37,6 +37,9 @@ interface LIMSContextType {
   currentUser: User;
   setCurrentUser: (u: User) => void;
   users: User[];
+  isAuthenticated: boolean;
+  login: (identifier: string, passwordInput: string) => { success: boolean; message?: string };
+  logout: () => void;
   samples: Sample[];
   parameters: ParameterConfig[];
   methods: AnalysisMethod[];
@@ -112,6 +115,14 @@ export const LIMSProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const parsed: User[] = JSON.parse(saved);
       return parsed.map((u) => {
         const matchingInitial = initialUsers.find((iu) => iu.id === u.id);
+        if (matchingInitial && (u.name.includes('Sidi') || u.name.includes('Fall') || u.id === 'u-1' || u.id === 'u-2')) {
+          return {
+            ...u,
+            name: matchingInitial.name,
+            email: matchingInitial.email,
+            password: u.password || matchingInitial.password || 'imrop2026'
+          };
+        }
         return {
           ...u,
           password: u.password || matchingInitial?.password || 'imrop2026'
@@ -122,7 +133,64 @@ export const LIMSProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   });
 
-  const [currentUser, setCurrentUser] = useState<User>(users[0] || initialUsers[0]);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    const sessionAuth = sessionStorage.getItem('imrop_lims_auth');
+    return sessionAuth === 'true';
+  });
+
+  const [currentUser, setCurrentUser] = useState<User>(() => {
+    const savedUser = sessionStorage.getItem('imrop_lims_current_user');
+    if (savedUser) {
+      try {
+        const parsed = JSON.parse(savedUser);
+        const match = users.find((u) => u.id === parsed.id || u.email === parsed.email);
+        if (match) return match;
+      } catch {
+        // ignore
+      }
+    }
+    return users[0] || initialUsers[0];
+  });
+
+  const login = (identifier: string, passwordInput: string): { success: boolean; message?: string } => {
+    const cleanId = identifier.trim().toLowerCase();
+    const cleanPwd = passwordInput.trim();
+
+    const foundUser = users.find(
+      (u) =>
+        u.email.toLowerCase() === cleanId ||
+        u.name.toLowerCase() === cleanId ||
+        u.id.toLowerCase() === cleanId ||
+        u.name.toLowerCase().includes(cleanId)
+    );
+
+    if (!foundUser) {
+      return { success: false, message: "Nom d'utilisateur ou e-mail introuvable." };
+    }
+
+    if (!foundUser.active) {
+      return { success: false, message: "Ce compte utilisateur est désactivé. Veuillez contacter l'administrateur." };
+    }
+
+    const expectedPwd = foundUser.password || 'imrop2026';
+    if (cleanPwd !== expectedPwd) {
+      logAudit('Échec d\'Authentification', foundUser.name, undefined, 'Mot de passe erroné');
+      return { success: false, message: "Mot de passe incorrect." };
+    }
+
+    setCurrentUser(foundUser);
+    setIsAuthenticated(true);
+    sessionStorage.setItem('imrop_lims_auth', 'true');
+    sessionStorage.setItem('imrop_lims_current_user', JSON.stringify(foundUser));
+    logAudit('Connexion Réussie', foundUser.name, undefined, `Rôle: ${foundUser.role}`);
+    return { success: true };
+  };
+
+  const logout = () => {
+    setIsAuthenticated(false);
+    sessionStorage.removeItem('imrop_lims_auth');
+    logAudit('Déconnexion', currentUser.name, undefined, 'Session terminée');
+  };
 
   const [samples, setSamples] = useState<Sample[]>(() => {
     const saved = localStorage.getItem('imrop_lims_samples');
@@ -737,9 +805,9 @@ export const LIMSProvider: React.FC<{ children: React.ReactNode }> = ({ children
       analystComment: 'Scénario Test IMROP - Valeurs stables. Étalonnage 2 points (pH 4.01 et pH 7.00) conforme.',
       approvalStatus: 'Approuvé par Resp. Labo',
       analystSignatureDate: '2026-08-04 09:30',
-      technicalCheckerName: 'Brahim Ould Fall',
+      technicalCheckerName: 'Dr. Bouya M\'Beingue',
       technicalCheckerDate: '2026-08-04 10:15',
-      labManagerName: 'Dr. Sidi Mohamed Ould Ely',
+      labManagerName: 'Brahim Med Moustapha',
       labManagerApprovalDate: '2026-08-04 11:00',
       isLocked: true,
       isConform: true
@@ -822,6 +890,9 @@ export const LIMSProvider: React.FC<{ children: React.ReactNode }> = ({ children
         currentUser,
         setCurrentUser,
         users,
+        isAuthenticated,
+        login,
+        logout,
         samples,
         parameters,
         methods,

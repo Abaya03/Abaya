@@ -16,8 +16,8 @@ import {
 export const initialUsers: User[] = [
   {
     id: 'u-1',
-    name: 'Dr. Sidi Mohamed Ould Ely',
-    email: 'sidi.ely@imrop.mr',
+    name: 'Brahim Med Moustapha',
+    email: 'brahim.moustapha@imrop.mr',
     role: 'Administrateur',
     lab: 'Laboratoire de Chimie',
     active: true,
@@ -25,8 +25,8 @@ export const initialUsers: User[] = [
   },
   {
     id: 'u-2',
-    name: 'Brahim Ould Fall',
-    email: 'brahim.fall@imrop.mr',
+    name: 'Dr. Bouya M\'Beingue',
+    email: 'bouya.mbeingue@imrop.mr',
     role: 'Responsable du laboratoire',
     lab: 'Laboratoire de Chimie',
     active: true,
@@ -215,7 +215,7 @@ export const initialInstruments: Instrument[] = [
     lastCalibrationDate: '2026-08-01',
     nextCalibrationDate: '2026-08-15',
     calibrationCertRef: 'CERT-CAL-2026-089',
-    responsiblePerson: 'Brahim Ould Fall'
+    responsiblePerson: 'Dr. Bouya M\'Beingue'
   },
   {
     id: 'inst-2',
@@ -253,7 +253,7 @@ export const initialInstruments: Instrument[] = [
     lastCalibrationDate: '2026-06-10',
     nextCalibrationDate: '2026-12-10',
     calibrationCertRef: 'CERT-SHIM-2026',
-    responsiblePerson: 'Dr. Sidi Mohamed Ould Ely'
+    responsiblePerson: 'Brahim Med Moustapha'
   }
 ];
 
@@ -322,7 +322,7 @@ export const initialSamples: Sample[] = [
     receptionDate: '2026-08-04',
     receptionTime: '09:00',
     receivedBy: 'Mohamed Abdallahi',
-    verifiedBy: 'Dr. Sidi Mohamed Ould Ely',
+    verifiedBy: 'Brahim Med Moustapha',
     verifiedDate: '2026-08-04',
     applicant: 'Direction de la Recherche IMROP',
     organization: 'IMROP Nouakchott',
@@ -363,7 +363,7 @@ export const initialSamples: Sample[] = [
     receptionDate: '2026-08-03',
     receptionTime: '11:30',
     receivedBy: 'Aicha Mint Lemine',
-    verifiedBy: 'Brahim Ould Fall',
+    verifiedBy: 'Dr. Bouya M\'Beingue',
     verifiedDate: '2026-08-03',
     applicant: 'Délégation à la Surveillance Maritime (DSP)',
     organization: 'Ministère des Pêches',
@@ -400,7 +400,7 @@ export const initialSamples: Sample[] = [
     receptionDate: '2026-08-04',
     receptionTime: '14:15',
     receivedBy: 'Mohamed Abdallahi',
-    verifiedBy: 'Dr. Sidi Mohamed Ould Ely',
+    verifiedBy: 'Brahim Med Moustapha',
     verifiedDate: '2026-08-04',
     applicant: 'Projet Observatoire Environnemental',
     organization: 'PNBA / IMROP',
@@ -460,9 +460,9 @@ export const initialResults: AnalysisResult[] = [
     analystComment: 'Mesures stables. Étalonnage vérifié avec tampons pH 4.01 et 7.00 avant la série d\'analyses.',
     approvalStatus: 'Approuvé par Resp. Labo',
     analystSignatureDate: '2026-08-04 09:30',
-    technicalCheckerName: 'Brahim Ould Fall',
+    technicalCheckerName: 'Dr. Bouya M\'Beingue',
     technicalCheckerDate: '2026-08-04 10:15',
-    labManagerName: 'Dr. Sidi Mohamed Ould Ely',
+    labManagerName: 'Brahim Med Moustapha',
     labManagerApprovalDate: '2026-08-04 11:00',
     isLocked: true,
     isConform: true
@@ -476,7 +476,7 @@ export const initialReports: Report[] = [
     sampleId: 'samp-1',
     sampleCode: 'IMP-2026-00001',
     generatedDate: '2026-08-04',
-    generatedBy: 'Dr. Sidi Mohamed Ould Ely',
+    generatedBy: 'Brahim Med Moustapha',
     lab: 'Laboratoire de Chimie',
     status: 'Généré',
     pdfFilename: 'Rapport_Analyse_IMP-2026-00001.pdf'
@@ -537,7 +537,7 @@ export const initialAuditLogs: AuditLog[] = [
   {
     id: 'log-3',
     timestamp: '2026-08-04 10:15:00',
-    user: 'Brahim Ould Fall',
+    user: 'Dr. Bouya M\'Beingue',
     userRole: 'Responsable du laboratoire',
     action: 'Vérification Technique',
     resource: 'IMP-2026-00001',
@@ -547,7 +547,7 @@ export const initialAuditLogs: AuditLog[] = [
   {
     id: 'log-4',
     timestamp: '2026-08-04 11:00:00',
-    user: 'Dr. Sidi Mohamed Ould Ely',
+    user: 'Brahim Med Moustapha',
     userRole: 'Administrateur',
     action: 'Approbation Finale & Verrouillage',
     resource: 'IMP-2026-00001',
@@ -557,7 +557,7 @@ export const initialAuditLogs: AuditLog[] = [
   {
     id: 'log-5',
     timestamp: '2026-08-04 11:05:00',
-    user: 'Dr. Sidi Mohamed Ould Ely',
+    user: 'Brahim Med Moustapha',
     userRole: 'Administrateur',
     action: 'Génération Rapport PDF',
     resource: 'REP-IMROP-2026-00001',
